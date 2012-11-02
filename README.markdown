@@ -15,7 +15,7 @@ Also, a server that is made from an older AMI will need the latest code deployed
 Usage:
 -----
 <pre>
-    code_environment { 'my_awesome_application': app => 'my_awesome_application' }
+    code_environment { 'my_awesome_application': }
 </pre>
 
 Dependencies:
