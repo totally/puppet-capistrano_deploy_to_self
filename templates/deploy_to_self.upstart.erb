@@ -1,0 +1,30 @@
+description     "deploy_to_self"
+author          "learyryan@gmail.com"
+
+console output
+start on runlevel 2
+
+# SCRIPT IS MANAGED BY PUPPET
+script
+    APP=<%= scope.lookupvar('app') %>
+
+    # Setup $log for logging to logger/syslog
+    log="logger -t deploy_${APP}_to_self"
+    $log "started"
+
+    # Load ssh agent
+    eval `ssh-agent`
+    ssh-add
+    $log "key loaded"
+
+    # Assumes capistrano config is in $CAP_DIR
+    CAP_DIR="/root/capistrano/$APP"
+    cd $CAP_DIR  && git pull
+    $log "$APP deploying ..."
+    cap HOSTS=localhost deploy 2>&1 | $log
+    $log "$APP deployment complete"
+
+    # Unload ssh-agent
+    ssh-add -D
+
+end script
