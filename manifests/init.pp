@@ -8,7 +8,7 @@ define code_environment ($app = $name) {
             logoutput   => true,
             cwd         => "/root/capistrano/${app}",
             onlyif      => "ls /root/capistrano/${app}",
-            require     => [File['/var/www/apps'],Class['users::deployer']]
+            require     => [Class['capistrano'],Class['apache2']]
     }
 
     # puppet execute capistrano deploy.  we could use upstart script, but then 
@@ -20,7 +20,7 @@ define code_environment ($app = $name) {
             logoutput   => true,
             cwd         => "/root/capistrano/${app}",
             onlyif      => "ls /root/capistrano/${app}",
-            require     => [Exec["cap_setup_${app}"],Class['apache2'],Class['users::deployer']]
+            require     => [Exec["cap_setup_${app}"],Class['apache2'],Class['capistrano']]
     }
 
     # Upstart file
